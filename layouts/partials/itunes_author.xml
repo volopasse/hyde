@@ -1,0 +1,23 @@
+{{- if isset .Params "hosts" -}}
+    {{ $hosts := (.Params.hosts) }}
+    {{ $len := (len $hosts) }}
+    {{ range $index, $element := $hosts }}
+        {{ range where (where $.Site.Pages "Type" "host" ) ".File.BaseFileName" "=" . }}
+            {{- if eq $len 1 -}}
+                {{ .Title }}
+            {{- else -}}
+                {{- if eq (add $index 1) $len }}
+                    and {{ .Title }}
+                {{- else -}}
+                    {{- if eq $len 2 -}}
+                        {{ printf "%s " .Title }}
+                    {{- else -}}
+                        {{ printf "%s, " .Title }}
+                    {{- end -}}
+                {{- end -}}
+            {{- end -}}
+        {{ end }}
+    {{- end -}}
+{{- else -}}
+    {{ .Site.Params.feed.itunes_author }}
+{{- end -}}
